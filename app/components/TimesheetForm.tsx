@@ -31,10 +31,10 @@ interface TimesheetFormProps {
 }
 
 export default function TimesheetForm({ employees, mode, actionData, timesheet }: TimesheetFormProps) {
-    const [employeeId, setEmployeeId] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
-    const [summary, setSummary] = useState("");
+    const [employeeId, setEmployeeId] = useState(timesheet?.employee_id || '');
+    const [startTime, setStartTime] = useState(timesheet?.start_time || '');
+    const [endTime, setEndTime] = useState(timesheet?.end_time || '');
+    const [summary, setSummary] = useState(timesheet?.summary || '');
     const [errors, setErrors] = useState<ValidationErrors>({});
 
     useEffect(() => {
