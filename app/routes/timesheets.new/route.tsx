@@ -1,53 +1,45 @@
-import { useLoaderData, Form, redirect } from "react-router";
+import { useLoaderData, useActionData, redirect } from "react-router";
 import { getDB } from "~/db/getDB";
+import TimesheetForm from "~/components/TimesheetForm"; // Import your reusable component
+import { validateTimesheet } from "controller/timesheetController";
 
-export async function loader() {
+export async function loader({ params }: any) {
   const db = await getDB();
-  const employees = await db.all('SELECT id, full_name FROM employees');
+  const employees = await db.all("SELECT id, full_name FROM employees");
+
   return { employees };
 }
 
-import type { ActionFunction } from "react-router";
-
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request, params }: any) => {
   const formData = await request.formData();
-  const employee_id = formData.get("employee_id"); // <select /> input with name="employee_id"
+  const employee_id = formData.get("employee_id");
   const start_time = formData.get("start_time");
   const end_time = formData.get("end_time");
+  const summary = formData.get("summary");
+
+  const validationResult = validateTimesheet({ employee_id, start_time, end_time, summary });
+
+  if (validationResult !== true) {
+    return validationResult;
+  }
 
   const db = await getDB();
-  await db.run(
-    'INSERT INTO timesheets (employee_id, start_time, end_time) VALUES (?, ?, ?)',
-    [employee_id, start_time, end_time]
-  );
+  try {
+    await db.run(
+      "INSERT INTO timesheets (employee_id, start_time, end_time, summary) VALUES (?, ?, ?, ?)",
+      [employee_id, start_time, end_time, summary]
+    );
 
-  return redirect("/timesheets");
-}
+    return redirect("/timesheets");
+  } catch (error) {
+    console.error("Failed to create timesheet:", error);
+    return { error: "Failed to create timesheet. Please try again." };
+  }
+};
 
-export default function NewTimesheetPage() {
-  const { employees } = useLoaderData(); // Used to create a select input
-  return (
-    <div>
-      <h1>Create New Timesheet</h1>
-      <Form method="post">
-        <div>
-          {/* Use employees to create a select input */}
-        </div>
-        <div>
-          <label htmlFor="start_time">Start Time</label>
-          <input type="datetime-local" name="start_time" id="start_time" required />
-        </div>
-        <div>
-          <label htmlFor="end_time">End Time</label>
-          <input type="datetime-local" name="end_time" id="end_time" required />
-        </div>
-        <button type="submit">Create Timesheet</button>
-      </Form>
-      <hr />
-      <ul>
-        <li><a href="/timesheets">Timesheets</a></li>
-        <li><a href="/employees">Employees</a></li>
-      </ul>
-    </div>
-  );
+export default function TimesheetPage() {
+  const { employees } = useLoaderData();
+  const actionData = useActionData();
+
+  return <TimesheetForm mode='create' employees={employees} actionData={actionData} />;
 }

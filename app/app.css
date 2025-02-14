@@ -1,6 +1,6 @@
 /* Uncomment to enable TailwindCSS */
 
-/* @import "tailwindcss";
+@import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
@@ -18,8 +18,40 @@ body {
   @media (prefers-color-scheme: light) {
     color-scheme: dark;
   }
-} */
+}
 
 body {
   font-family: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.field {
+  @apply border border-[1px] border-gray-300 rounded-md p-[1.3ex] text-sm font-light
+}
+
+.field-label {
+  @apply font-semibold text-sm text-gray-400
+}
+
+.field-form-container {
+  @apply grid grid-cols-2 gap-2 items-center
+}
+
+.page-header {
+  @apply text-3xl font-semibold
+}
+
+.form {
+  @apply border border-gray-300  p-9 rounded-xl
+}
+
+.primary-button {
+  @apply bg-black px-4 py-2 rounded-md text-white hover:bg-gray-800 transition-all duration-300 cursor-pointer
+}
+
+.li-button {
+  @apply border border-gray-300 p-2 px-6 rounded-md hover:border-black text-black transition-all duration-300 cursor-pointer
+}
+
+.li-container {
+  @apply w-full flex justify-end my-3
 }
