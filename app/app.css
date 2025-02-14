@@ -33,7 +33,7 @@ body {
 }
 
 .field-form-container {
-  @apply grid grid-cols-2 gap-2 items-center
+  @apply grid grid-cols-1 md:grid-cols-2 gap-2 items-center 
 }
 
 .page-header {
@@ -41,7 +41,7 @@ body {
 }
 
 .form {
-  @apply border border-gray-300  p-9 rounded-xl
+  @apply border border-gray-300  p-9 rounded-xl overflow-auto
 }
 
 .primary-button {
@@ -49,9 +49,9 @@ body {
 }
 
 .li-button {
-  @apply border border-gray-300 p-2 px-6 rounded-md hover:border-black text-black transition-all duration-300 cursor-pointer
+  @apply border border-gray-300 text-sm text-center md:text-lg p-2 px-6 rounded-md hover:border-black text-black transition-all duration-300 cursor-pointer
 }
 
 .li-container {
-  @apply w-full flex justify-end my-3
+  @apply w-full flex justify-center md:justify-end my-3
 }

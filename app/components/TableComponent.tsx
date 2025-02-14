@@ -29,7 +29,7 @@ interface TableComponentProps {
 }
 
 const TableComponent: React.FC<TableComponentProps> = ({
-    name = "Table", 
+    name = "Table",
     data = [],
     headers = [],
     rowsPerPage = 5,
@@ -87,23 +87,23 @@ const TableComponent: React.FC<TableComponentProps> = ({
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
     return (
-        <div className="w-full border rounded-xl border-gray-300 p-6">
+        <div className="w-full border rounded-xl border-gray-300 p-6 overflow-auto">
             {/* Table Header */}
             <h1 className="font-bold text-3xl">
                 {capitalizeFirstLetter(name)}s
             </h1>
 
             {/* Search and Action Buttons */}
-            <div className="flex justify-between items-center py-5 px-3">
+            <div className="flex flex-col md:flex-row gap-2 justify-between items-center py-5 px-3">
                 <input
                     type="text"
                     placeholder="Search..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="field w-[50ex]"
+                    className="field w-full md:w-[50ex]"
                     aria-label="Search"
                 />
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                     {FilterFields && <FilterFields />}
                     <button
                         onClick={onActionButtonClick ? onActionButtonClick : () => navigate(`/${name}s/new`)}
@@ -114,69 +114,71 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     </button>
                 </div>
             </div>
+            <div className="overflow-auto">
 
-            {/* Table */}
-            <table className={`${tableClassName} border-gray-300`}>
-                <thead className="text-xs border-b border-gray-300">
-                    <tr>
-                        {headers.map((head, index) => (
-                            <th
-                                key={`${head}-${index}`}
-                                className={`px-4 py-4 cursor-pointer text-gray-400 ${headerClassName}`}
-                                onClick={() => handleSort(head)}
-                                aria-sort={sortConfig?.column === head ? sortConfig.order : "none"}
-                            >
-                                {formatHeader(head)}
-                                {sortConfig?.column === head && (
-                                    <span className="ml-2">
-                                        {sortConfig.order === "asc" ? "▲" : "▼"}
-                                    </span>
-                                )}
-                            </th>
-                        ))}
-                        {ActionComponent && <th className={`px-4 py-4 ${headerClassName}`}>Actions</th>}
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {currentRows.length > 0 ? (
-                        currentRows.map((row, i) => (
-                            <tr
-                                key={`${row.id}-${i}`}
-                                className="cursor-pointer hover:bg-gray-100"
-                                onClick={() => onRowClick?.(row)}
-                                aria-label={`Row ${i + 1}`}
-                            >
-                                {headers.map((header, index) => (
-                                    <td
-                                        className="w-[30ex] px-4 py-3 text-center"
-                                        key={`${header}-${index}`}
-                                    >
-                                        {renderColumn
-                                            ? renderColumn({
-                                                column: header,
-                                                value: row[header],
-                                                row,
-                                            })
-                                            : row[header]}
-                                    </td>
-                                ))}
-                                {ActionComponent && (
-                                    <td className="px-4 py-3 text-center">
-                                        <ActionComponent row={row} />
-                                    </td>
-                                )}
-                            </tr>
-                        ))
-                    ) : (
+                {/* Table */}
+                <table className={`${tableClassName} border-gray-300`}>
+                    <thead className="text-xs border-b border-gray-300">
                         <tr>
-                            <td colSpan={headers.length + (ActionComponent ? 1 : 0)} className="text-center py-4">
-                                No results found
-                            </td>
+                            {headers.map((head, index) => (
+                                <th
+                                    key={`${head}-${index}`}
+                                    className={`px-4 py-4 cursor-pointer text-gray-400 ${headerClassName}`}
+                                    onClick={() => handleSort(head)}
+                                    aria-sort={sortConfig?.column === head ? sortConfig.order : "none"}
+                                >
+                                    {formatHeader(head)}
+                                    {sortConfig?.column === head && (
+                                        <span className="ml-2">
+                                            {sortConfig.order === "asc" ? "▲" : "▼"}
+                                        </span>
+                                    )}
+                                </th>
+                            ))}
+                            {ActionComponent && <th className={`px-4 py-4 ${headerClassName}`}>Actions</th>}
                         </tr>
-                    )}
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        {currentRows.length > 0 ? (
+                            currentRows.map((row, i) => (
+                                <tr
+                                    key={`${row.id}-${i}`}
+                                    className="cursor-pointer hover:bg-gray-100"
+                                    onClick={() => onRowClick?.(row)}
+                                    aria-label={`Row ${i + 1}`}
+                                >
+                                    {headers.map((header, index) => (
+                                        <td
+                                            className="w-[30ex] px-4 py-3 text-center"
+                                            key={`${header}-${index}`}
+                                        >
+                                            {renderColumn
+                                                ? renderColumn({
+                                                    column: header,
+                                                    value: row[header],
+                                                    row,
+                                                })
+                                                : row[header]}
+                                        </td>
+                                    ))}
+                                    {ActionComponent && (
+                                        <td className="px-4 py-3 text-center">
+                                            <ActionComponent row={row} />
+                                        </td>
+                                    )}
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={headers.length + (ActionComponent ? 1 : 0)} className="text-center py-4">
+                                    No results found
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Pagination */}
             <div className="flex w-full h-full items-center justify-center gap-5 py-3">

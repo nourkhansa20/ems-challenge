@@ -70,8 +70,8 @@ export default function TimesheetsPage() {
 
   return (
     <div className="w-full">
-      <div className="mb-4 clas flex justify-between">
-        <div className="flex gap-3 w-fit items-center">
+      <div className="mb-4 clas flex flex-col md:flex-row justify-center md:justify-between">
+        <div className="flex mt-3 md:mt-0 gap-3 md:w-fit w-full justify-center  items-center">
           <button
             onClick={() => setView("table")}
             className={`p-2 h-fit cursor-pointer w-[20ex] border rounded-md transition-colors duration-300 ${view === "table" ? "bg-black text-white" : "text-black border border-gray-300"

@@ -81,7 +81,7 @@ export default function TimesheetForm({ employees, mode, actionData, timesheet }
                     </li>
                 )}
             </ul>
-            <Form method="post" className="form flex justify-between items-center flex-col w-[60ex]" onSubmit={handleSubmit}>
+            <Form method="post" className="form flex justify-between items-center flex-col md:w-[60ex]" onSubmit={handleSubmit}>
                 <h1 className="page-header pb-6 w-full border border-t-0 border-l-0 border-r-0 mb-5 border-b-gray-300 ">{mode === "create" ? "Create New Timesheet" : "Edit Timesheet"}</h1>
                 <div className="field-form-container !grid-cols-1">
 
